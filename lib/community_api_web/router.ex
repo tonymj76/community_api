@@ -5,8 +5,13 @@ defmodule CommunityApiWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", CommunityApiWeb do
+  scope "/api" do
     pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: CommunityApiWeb.Schema.NewSchemaType,
+      interface: :simple,
+      context: %{pubsub: CommunityApiWeb.Endpoint}
   end
 
   # Enables LiveDashboard only for development
